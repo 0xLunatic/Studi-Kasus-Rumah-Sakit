@@ -23,7 +23,6 @@ private:
 public:
     bool cekKelayakan()
     {
-
         if (BPJSPasien.nomorBPJS.length() == 8)
         {
             return true;
@@ -35,7 +34,7 @@ public:
     }
     void inputBJPS()
     {
-        cout << "Masukkan Nama BPJSPasien: ";
+        cout << "Masukkan Nama Pasien: ";
         getline(cin, BPJSPasien.nama);
 
         cout << "Masukkan umur : ";
