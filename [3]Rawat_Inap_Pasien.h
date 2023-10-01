@@ -1,134 +1,157 @@
-// #include <fstream>
-// #include <iostream>
-// #include <string>
-// #include <vector>
-// using namespace std;
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
 
-// struct Pasien {
-//   string nama;
-//   string alasan;
-//   int lamaMenginap;
-//   int ruangan;
-//   double biaya;
+class RawatInap
+{
+private:
+    struct Pasien
+    {
+        string nama;
+        string alasan;
+        int lamaMenginap;
+        int ruangan;
+        double biaya;
 
-//   Pasien(string n, string a, int lm, int r)
-//       : nama(n), alasan(a), lamaMenginap(lm), ruangan(r) {
-//     biaya = 2000 * lamaMenginap;
-//   }
-// };
+        Pasien(string n, string a, int lm, int r)
+            : nama(n), alasan(a), lamaMenginap(lm), ruangan(r)
+        {
+            biaya = 2000 * lamaMenginap;
+        }
+    };
 
-// void tambahPasien(vector<Pasien> &pasienList) {
-//   string nama, alasan;
-//   int lamaMenginap, ruangan;
+    vector<Pasien> pasienList;
 
-//   cout << endl;
-//   cout << "Masukkan nama pasien: ";
-//   cin.ignore();
-//   getline(cin, nama);
+public:
+    RawatInap()
+    {
+        ifstream file("data_pasien_inap.txt");
 
-//   cout << "Alasan pasien rawat inap: ";
-//   getline(cin, alasan);
+        if (file.is_open())
+        {
+            string nama, alasan;
+            int lamaMenginap, ruangan;
+            double biaya;
 
-//   cout << "Berapa lama pasien menginap (hari): ";
-//   cin >> lamaMenginap;
+            while (getline(file, nama))
+            {
+                getline(file, alasan);
+                file >> lamaMenginap;
+                file >> ruangan;
+                file >> biaya;
+                file.ignore();
 
-//   cout << "Pilih nomor ruangan (1-20): ";
-//   cin >> ruangan;
+                Pasien pasien(nama, alasan, lamaMenginap, ruangan);
+                pasienList.push_back(pasien);
+            }
 
-//   bool ruanganTersedia = true;
-//   for (const Pasien &pasien : pasienList) {
-//     if (pasien.ruangan == ruangan) {
-//       ruanganTersedia = false;
-//       break;
-//     }
-//   }
+            file.close();
+        }
+    }
 
-//   if (!ruanganTersedia || ruangan < 1 || ruangan > 20) {
-//     cout << "Ruangan tidak tersedia atau nomor ruangan tidak valid." << endl;
-//     return;
-//   }
+    void tambahPasien()
+    {
+        string nama, alasan;
+        int lamaMenginap, ruangan;
 
-//   Pasien pasien(nama, alasan, lamaMenginap, ruangan);
-//   pasienList.push_back(pasien);
+        cout << endl;
+        cout << "Masukkan nama pasien: ";
+        cin.ignore();
+        getline(cin, nama);
 
-//   cout << "Pasien berhasil ditambahkan ke dalam sistem." << endl;
-// }
+        cout << "Alasan pasien rawat inap: ";
+        getline(cin, alasan);
 
-// void tampilkanPasien(const vector<Pasien> &pasienList) {
-//   cout << "Data Pasien Rawat Inap:" << endl;
-//   for (const Pasien &pasien : pasienList) {
-//     cout << "---------------------------" << endl;
-//     cout << "Nama: " << pasien.nama << endl;
-//     cout << "Alasan Rawat Inap: " << pasien.alasan << endl;
-//     cout << "Lama Menginap (hari): " << pasien.lamaMenginap << endl;
-//     cout << "Ruangan: " << pasien.ruangan << endl;
-//     cout << "Biaya: Rp" << pasien.biaya << endl;
-//     cout << "---------------------------" << endl;
-//     cout << endl;
-//   }
-// }
+        cout << "Berapa lama pasien menginap (hari): ";
+        cin >> lamaMenginap;
 
-// void keluarProgram(const vector<Pasien> &pasienList) {
-//   ofstream file("data_pasien_inap.txt");
+        cout << "Pilih nomor ruangan (1-20): ";
+        cin >> ruangan;
 
-//   for (const Pasien &pasien : pasienList) {
-//     file << pasien.nama << endl;
-//     file << pasien.alasan << endl;
-//     file << pasien.lamaMenginap << endl;
-//     file << pasien.ruangan << endl;
-//     file << pasien.biaya << endl;
-//   }
+        bool ruanganTersedia = true;
+        for (const Pasien &pasien : pasienList)
+        {
+            if (pasien.ruangan == ruangan)
+            {
+                ruanganTersedia = false;
+                break;
+            }
+        }
 
-//   file.close();
-//   exit(0);
-// }
+        if (!ruanganTersedia || ruangan < 1 || ruangan > 20)
+        {
+            cout << "Ruangan tidak tersedia atau nomor ruangan tidak valid." << endl;
+            return;
+        }
 
-// int main() {
-//   vector<Pasien> pasienList;
-//   ifstream file("data_pasien_inap.txt");
+        Pasien pasien(nama, alasan, lamaMenginap, ruangan);
+        pasienList.push_back(pasien);
 
-//   if (file.is_open()) {
-//     string nama, alasan;
-//     int lamaMenginap, ruangan;
-//     double biaya;
+        cout << "Pasien berhasil ditambahkan ke dalam sistem." << endl;
+    }
 
-//     while (getline(file, nama)) {
-//       getline(file, alasan);
-//       file >> lamaMenginap;
-//       file >> ruangan;
-//       file >> biaya;
+    void tampilkanPasien()
+    {
+        cout << "Data Pasien Rawat Inap:" << endl;
+        for (const Pasien &pasien : pasienList)
+        {
+            cout << "---------------------------" << endl;
+            cout << "Nama: " << pasien.nama << endl;
+            cout << "Alasan Rawat Inap: " << pasien.alasan << endl;
+            cout << "Lama Menginap (hari): " << pasien.lamaMenginap << endl;
+            cout << "Ruangan: " << pasien.ruangan << endl;
+            cout << "Biaya: Rp" << pasien.biaya << endl;
+            cout << "---------------------------" << endl;
+            cout << endl;
+        }
+    }
 
-//       Pasien pasien(nama, alasan, lamaMenginap, ruangan);
-//       pasienList.push_back(pasien);
-//     }
+    void keluarProgram()
+    {
+        ofstream file("data_pasien_inap.txt");
 
-//     file.close();
-//   }
+        for (const Pasien &pasien : pasienList)
+        {
+            file << pasien.nama << endl;
+            file << pasien.alasan << endl;
+            file << pasien.lamaMenginap << endl;
+            file << pasien.ruangan << endl;
+            file << pasien.biaya << endl;
+        }
 
-//   while (true) {
-//     cout << "Menu Utama:" << endl;
-//     cout << "1. Tambah Pasien Rawat Inap" << endl;
-//     cout << "2. Tampilkan Pasien Rawat Inap" << endl;
-//     cout << "3. Keluar" << endl;
+        file.close();
+        exit(0);
+    }
 
-//     int pilihan;
-//     cout << "Pilih menu: ";
-//     cin >> pilihan;
+    void run()
+    {
+        while (true)
+        {
+            cout << "Menu Utama:" << endl;
+            cout << "1. Tambah Pasien Rawat Inap" << endl;
+            cout << "2. Tampilkan Pasien Rawat Inap" << endl;
+            cout << "3. Keluar" << endl;
 
-//     switch (pilihan) {
-//     case 1:
-//       tambahPasien(pasienList);
-//       break;
-//     case 2:
-//       tampilkanPasien(pasienList);
-//       break;
-//     case 3:
-//       keluarProgram(pasienList);
-//       break;
-//     default:
-//       cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
-//     }
-//   }
+            int pilihan;
+            cout << "Pilih menu: ";
+            cin >> pilihan;
 
-//   return 0;
-// }
+            switch (pilihan)
+            {
+            case 1:
+                tambahPasien();
+                break;
+            case 2:
+                tampilkanPasien();
+                break;
+            case 3:
+                keluarProgram();
+                break;
+            default:
+                cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+            }
+        }
+    }
+};
